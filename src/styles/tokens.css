@@ -1,0 +1,129 @@
+/* ============================================================
+   VALORANT Vault — design tokens
+   Dark, tinted-neutral chrome so the vivid game art carries the
+   color. One committed red accent, tuned in OKLCH (not flat #FF4655).
+   ============================================================ */
+
+:root {
+  /* --- neutrals: tinted toward a cool blue-violet ink --- */
+  --ink-900: oklch(0.145 0.012 274);   /* app background */
+  --ink-850: oklch(0.175 0.014 274);   /* recessed wells */
+  --ink-800: oklch(0.205 0.015 274);   /* panels / cards */
+  --ink-750: oklch(0.245 0.016 274);   /* raised / hover */
+  --ink-700: oklch(0.30 0.017 274);    /* borders strong */
+  --line:    oklch(1 0 0 / 0.08);      /* hairline borders */
+  --line-strong: oklch(1 0 0 / 0.14);
+
+  --text:    oklch(0.97 0.004 274);
+  --text-dim: oklch(0.78 0.012 274);
+  --text-mute: oklch(0.62 0.014 274);
+
+  /* --- accent: VALORANT red, tuned --- */
+  --acc:      oklch(0.635 0.205 18);
+  --acc-bright: oklch(0.70 0.21 20);
+  --acc-dim:  oklch(0.635 0.205 18 / 0.16);
+  --acc-line: oklch(0.635 0.205 18 / 0.45);
+
+  /* --- support color for data/positive states --- */
+  --cyan:    oklch(0.80 0.13 200);
+  --gold:    oklch(0.82 0.14 86);
+
+  /* --- typography --- */
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --step--1: 0.82rem;
+  --step-0: 0.95rem;
+  --step-1: 1.15rem;
+  --step-2: 1.45rem;
+  --step-3: 1.85rem;
+  --step-4: 2.6rem;
+  --step-5: clamp(2.8rem, 6vw, 5rem);
+
+  /* --- radii / elevation --- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-2: 0 12px 30px -12px oklch(0 0 0 / 0.7);
+  --shadow-pop: 0 24px 60px -20px oklch(0 0 0 / 0.8);
+
+  /* --- motion --- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);     /* ease-out-quint */
+  --t-fast: 130ms;
+  --t-med: 220ms;
+
+  /* --- layout --- */
+  --rail-w: 248px;
+  --content-max: 1320px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink-900);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* faint vignette + dot field gives the ink some depth */
+  background-image:
+    radial-gradient(1200px 700px at 80% -10%, oklch(0.635 0.205 18 / 0.10), transparent 60%),
+    radial-gradient(900px 600px at -5% 0%, oklch(0.80 0.13 240 / 0.06), transparent 55%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+
+img { display: block; max-width: 100%; }
+
+input { font: inherit; }
+
+::selection { background: var(--acc); color: white; }
+
+:focus-visible {
+  outline: 2px solid var(--acc-bright);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* tame scrollbars to the ink theme */
+* {
+  scrollbar-color: var(--ink-700) transparent;
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--ink-700);
+  border-radius: 99px;
+  border: 2px solid var(--ink-900);
+}
+
+/* the eyebrow / kicker used throughout */
+.kicker {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

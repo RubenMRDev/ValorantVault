@@ -1,0 +1,89 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: oklch(0 0 0 / 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  padding: 12vh 1rem 1rem;
+  animation: fade var(--t-fast) var(--ease-out);
+}
+@keyframes fade { from { opacity: 0; } }
+
+.panel {
+  width: 100%;
+  max-width: 620px;
+  height: max-content;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink-850);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+  animation: pop var(--t-med) var(--ease-out);
+}
+@keyframes pop { from { transform: translateY(-10px) scale(0.99); opacity: 0; } }
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+.inputRow svg { color: var(--text-mute); flex: none; }
+.input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.05rem;
+  outline: none;
+}
+.input::placeholder { color: var(--text-mute); }
+.esc {
+  font-size: 0.7rem;
+  color: var(--text-mute);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  padding: 0.12rem 0.4rem;
+}
+
+.results { overflow-y: auto; padding: 0.4rem; }
+.groupLabel {
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  font-weight: 700;
+  padding: 0.7rem 0.7rem 0.3rem;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-sm);
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+}
+.rowActive { background: var(--acc-dim); color: var(--text); }
+.thumb {
+  width: 40px; height: 40px;
+  border-radius: var(--r-sm);
+  flex: none;
+}
+.rowText { min-width: 0; }
+.rowTitle {
+  font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rowSub { font-size: 0.78rem; color: var(--text-mute); }
+
+.empty { padding: 2.5rem 1rem; text-align: center; color: var(--text-mute); }

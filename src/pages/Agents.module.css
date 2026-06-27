@@ -1,0 +1,119 @@
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.card {
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  aspect-ratio: 0.82;
+  display: flex;
+  align-items: flex-end;
+  isolation: isolate;
+  transition: transform var(--t-med) var(--ease-out), border-color var(--t-med) var(--ease-out);
+}
+.card:hover { transform: translateY(-5px); border-color: var(--line-strong); }
+.card::before {
+  content: '';
+  position: absolute; inset: 0; z-index: -2;
+  background: var(--grad, var(--ink-800));
+  opacity: 0.9;
+}
+.card::after {
+  content: '';
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, oklch(0 0 0 / 0.85) 8%, transparent 60%);
+}
+.portrait {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center 18%;
+  transition: transform var(--t-med) var(--ease-out);
+}
+.card:hover .portrait { transform: scale(1.05); }
+
+.meta { padding: 0.9rem 1rem 1rem; position: relative; }
+.role {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  font-weight: 700; color: oklch(1 0 0 / 0.85);
+}
+.role img { width: 14px; height: 14px; filter: drop-shadow(0 1px 2px black); }
+.name {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 1.5rem;
+  text-transform: uppercase; letter-spacing: 0.01em;
+  color: white; line-height: 1; margin-top: 0.2rem;
+  text-shadow: 0 2px 12px oklch(0 0 0 / 0.6);
+}
+
+/* ---- detail ---- */
+.hero {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  isolation: isolate;
+}
+.heroBg { position: absolute; inset: 0; z-index: -2; }
+.heroBg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, oklch(0 0 0 / 0.85) 30%, transparent 75%);
+}
+.heroText { padding: 2.4rem; align-self: center; max-width: 540px; }
+.heroName {
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  text-transform: uppercase; line-height: 0.9; letter-spacing: -0.02em;
+  color: white;
+}
+.heroDesc { color: oklch(1 0 0 / 0.82); margin-top: 1rem; font-size: var(--step-1); }
+.heroPortrait {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  height: 100%;
+  width: 100%;
+}
+.heroPortrait img {
+  position: absolute; bottom: 0; right: 0;
+  height: 110%; width: 100%;
+  object-fit: contain; object-position: bottom right;
+  filter: drop-shadow(0 20px 40px oklch(0 0 0 / 0.5));
+}
+
+.abilities {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.ability {
+  display: flex; gap: 0.9rem;
+  padding: 1rem;
+  background: var(--ink-800);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+.abilityIcon {
+  width: 46px; height: 46px; flex: none;
+  padding: 8px;
+  background: var(--ink-850);
+  border-radius: var(--r-sm);
+}
+.abilityIcon img { width: 100%; height: 100%; object-fit: contain; }
+.abilitySlot { font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--acc-bright); font-weight: 700; }
+.abilityName { font-weight: 700; margin: 1px 0 4px; }
+.abilityDesc { font-size: 0.85rem; color: var(--text-mute); line-height: 1.45; }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .heroPortrait { display: none; }
+  .heroText { padding: 1.6rem; }
+}

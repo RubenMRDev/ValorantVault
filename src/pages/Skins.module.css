@@ -1,0 +1,77 @@
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.more {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.7rem 1.6rem;
+  background: var(--ink-800);
+  border: 1px solid var(--line-strong);
+  border-radius: 99px;
+  color: var(--text);
+  font-weight: 600;
+  transition: background var(--t-fast) var(--ease-out);
+}
+.more:hover { background: var(--ink-750); }
+
+/* ---- skin detail ---- */
+.stage {
+  position: relative;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(100% 80% at 50% 110%, var(--glow, transparent), transparent 60%),
+    var(--ink-850);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  min-height: 340px;
+  overflow: hidden;
+}
+.stage img.render { max-width: 100%; max-height: 340px; object-fit: contain; }
+.stage video {
+  max-width: 100%;
+  max-height: 360px;
+  border-radius: var(--r-md);
+  background: black;
+}
+.tierTag {
+  position: absolute; top: 1rem; left: 1rem;
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.3rem 0.7rem; border-radius: 99px;
+  background: oklch(0 0 0 / 0.4); backdrop-filter: blur(6px);
+}
+.tierTag img { width: 16px; height: 16px; }
+
+.variants { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+.swatch {
+  width: 56px; height: 56px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line);
+  background: var(--ink-800);
+  padding: 4px;
+  overflow: hidden;
+  transition: border-color var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+}
+.swatch img { width: 100%; height: 100%; object-fit: contain; }
+.swatch:hover { transform: translateY(-2px); }
+.swatchOn { border-color: var(--acc); }
+
+.levelRow {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem;
+}
+.level {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--ink-800);
+  font-size: 0.82rem; font-weight: 600; color: var(--text-dim);
+  transition: all var(--t-fast) var(--ease-out);
+}
+.level:hover { border-color: var(--line-strong); color: var(--text); }
+.levelOn { border-color: var(--acc); color: var(--text); background: var(--acc-dim); }
+.playMark { color: var(--acc-bright); font-size: 0.7rem; }
