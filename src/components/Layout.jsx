@@ -7,6 +7,12 @@ import s from './Layout.module.css'
 
 const NAV = [
   {
+    label: 'Tools',
+    links: [
+      ['/battle-pass', 'Battle Pass Calc'],
+    ],
+  },
+  {
     label: 'Arsenal',
     links: [
       ['/agents', 'Agents'],

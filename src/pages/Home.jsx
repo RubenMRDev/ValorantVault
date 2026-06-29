@@ -11,6 +11,7 @@ const TILES = [
   ['/weapons', 'Weapons', 'The armory with stats, damage falloff tables and every skin per weapon.'],
   ['/maps', 'Maps', 'Splash art, minimaps and tactical callouts plotted in place.'],
   ['/ranks', 'Ranks', 'The competitive ladder from Iron to Radiant in each tier’s own color.'],
+  ['/battle-pass', 'Battle Pass Calc', 'Work out how much you must grind to max the pass before the act ends.'],
   ['/playercards', 'Cosmetics', 'Player cards, sprays, gun buddies, bundles and titles, all in one place.'],
 ]
 

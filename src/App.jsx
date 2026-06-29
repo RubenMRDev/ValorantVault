@@ -7,6 +7,7 @@ import { Weapons, WeaponDetail } from './pages/Weapons.jsx'
 import { Skins, SkinDetail } from './pages/Skins.jsx'
 import { Maps, MapDetail } from './pages/Maps.jsx'
 import { Ranks } from './pages/Ranks.jsx'
+import { BattlePass } from './pages/BattlePass.jsx'
 import { Collection } from './pages/Collection.jsx'
 
 // scroll to top whenever the route changes
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/maps" element={<Maps />} />
         <Route path="/maps/:id" element={<MapDetail />} />
         <Route path="/ranks" element={<Ranks />} />
+        <Route path="/battle-pass" element={<BattlePass />} />
 
         {/* generic gallery collections */}
         <Route path="/playercards" element={<Collection resourceKey="playercards" />} />

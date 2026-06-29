@@ -14,6 +14,7 @@ data API for VALORANT. Built with React + Vite.
 - **Skins** — 1,300+ skins by rarity, with chroma swatches, level upgrades and **in-game video previews**.
 - **Maps** — splash art, minimaps with tactical callouts plotted in place.
 - **Ranks** — the competitive ladder, Iron to Radiant, in each tier's own color.
+- **Battle Pass Calculator** — how much you must grind to max the pass before the act ends, with the live act end date from `/v1/seasons` and per-mode game/hour breakdowns.
 - **Cosmetics** — player cards, sprays, gun buddies, bundles, titles, currencies, gear.
 - **Cmd/Ctrl-K search** across agents, weapons, skins and maps.
 - **18 languages** via the API's `language` parameter (switcher in the top bar).
