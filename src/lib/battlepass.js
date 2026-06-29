@@ -1,15 +1,21 @@
-// VALORANT battle pass math. The tier-cost ramp is the documented one; the
-// per-match XP figures are community averages. The only *live* data is the act
-// end date, which the page pulls from valorant-api's /seasons endpoint.
-// ponytail: averages, not exact — tune MODES[].xp / WEEKLY_XP / EPILOGUE_XP here.
+// VALORANT battle pass math. The tier-cost ramp is the documented one; every XP
+// figure below is a *default* the UI lets you override. The only live data is the
+// act window, which the page pulls from valorant-api's /seasons endpoint.
+// ponytail: defaults are community averages — all editable in the UI, tune freely.
 
 export const TIERS = 50
 export const EPILOGUE_TIERS = 5
-export const EPILOGUE_XP = 36500            // per epilogue tier
-export const WEEKLY_XP = 30000              // est. XP from a full week of missions
+export const MAX_TIER = TIERS + EPILOGUE_TIERS        // 55 = Epilogue 5
+export const EPILOGUE_XP = 36500                      // per epilogue tier
 
-const BASE_TIER_XP = 2000                   // cost to go from tier 1 -> 2
-const TIER_STEP = 750                       // each later level-up costs +750
+const BASE_TIER_XP = 2000                             // cost tier 1 -> 2
+const TIER_STEP = 750                                 // each later level-up +750
+
+export const DEFAULTS = {
+  weeklyXp: 30000,   // XP from one full week of weekly missions
+  dailyXp: 0,        // XP from daily bonuses (first win of the day, etc.) per day
+  boostPct: 0,       // overall XP boost applied to match XP, %
+}
 
 export const MODES = [
   { key: 'std', label: 'Unrated / Competitive', xp: 4100, minutes: 35 },
@@ -17,42 +23,64 @@ export const MODES = [
   { key: 'dm', label: 'Deathmatch', xp: 800, minutes: 7 },
 ]
 
-// XP to advance from tier t to t+1 (t = 1..49)
 export const levelUpCost = (t) => BASE_TIER_XP + (t - 1) * TIER_STEP
+export const tierLabel = (t) => (t > TIERS ? `Epilogue ${t - TIERS}` : `Tier ${t}`)
 
-// total tier XP needed to climb from `tier` up to tier 50
-export function tierXpFrom(tier) {
+// cumulative XP needed to reach a given tier from tier 1
+// (tiers 1..50 normal, 51..55 = epilogue 1..5)
+export function cumXp(tier) {
   let sum = 0
-  for (let t = Math.max(1, tier); t < TIERS; t++) sum += levelUpCost(t)
+  const cap = Math.min(tier, TIERS)
+  for (let t = 1; t < cap; t++) sum += levelUpCost(t)
+  if (tier > TIERS) sum += (tier - TIERS) * EPILOGUE_XP
   return sum
 }
 
-// Given progress + options + days left in the act, return what's left to grind
-// and how many games / hours that is per mode.
-export function plan({ tier, xpInto = 0, epilogue = false, weeklies = false, daysLeft = 0 }) {
-  let remaining = tierXpFrom(tier) - Math.max(0, xpInto)
-  if (epilogue) remaining += EPILOGUE_TIERS * EPILOGUE_XP
-  remaining = Math.max(0, remaining)
+// XP still owed inside the current tier before it ticks over
+export const tierToNext = (tier) => (tier >= MAX_TIER ? 0 : tier >= TIERS ? EPILOGUE_XP : levelUpCost(tier))
 
-  const weeksLeft = daysLeft / 7
-  if (weeklies) remaining = Math.max(0, remaining - Math.ceil(weeksLeft) * WEEKLY_XP)
+export function plan({
+  currentTier, goalTier, currentXp = 0, days = 0,
+  weeklyXp = 0, dailyXp = 0, boostPct = 0, modes = MODES,
+}) {
+  const bpTotal = cumXp(goalTier)
+  const have = cumXp(currentTier) + Math.max(0, currentXp)
+  const weeks = days / 7
 
-  const perDay = daysLeft > 0 ? remaining / daysLeft : remaining
-  const modes = MODES.map((m) => {
-    const games = Math.ceil(remaining / m.xp)
+  const grossRemaining = Math.max(0, bpTotal - have)            // XP still owed to the pass
+  const challengeBudget = Math.ceil(weeks) * Math.max(0, weeklyXp) + days * Math.max(0, dailyXp)
+  const remaining = Math.max(0, grossRemaining - challengeBudget) // must come from matches
+  const challengeXp = grossRemaining - remaining                  // challenge XP actually useful
+
+  const perDay = days > 0 ? remaining / days : remaining
+  const perWeek = weeks > 0 ? remaining / weeks : remaining
+  const mult = 1 + Math.max(0, boostPct) / 100
+
+  const modeRows = modes.map((m) => {
+    const xp = Math.max(0, m.xp) * mult
+    const games = xp > 0 ? Math.ceil(remaining / xp) : 0
+    const minutes = games * Math.max(0, m.minutes)
     return {
       ...m,
       games,
-      gamesPerDay: daysLeft > 0 ? games / daysLeft : games,
-      hours: (games * m.minutes) / 60,
+      minutes,
+      gamesPerDay: days > 0 ? games / days : games,
+      hoursPerDay: (days > 0 ? minutes / days : minutes) / 60,
     }
   })
-  return { remaining, perDay, weeksLeft, modes }
+
+  return {
+    bpTotal, have, grossRemaining, remaining, challengeXp,
+    perDay, perWeek, weeks,
+    remainingTiers: Math.max(0, goalTier - currentTier),
+    modes: modeRows,
+  }
 }
 
 // self-check (stripped from prod builds by Vite)
 if (import.meta.env.DEV) {
-  console.assert(tierXpFrom(1) === 980000, 'tier 1->50 should total 980,000 XP')
-  console.assert(levelUpCost(1) === 2000 && levelUpCost(2) === 2750, 'tier ramp +750')
-  console.assert(plan({ tier: 50, daysLeft: 10 }).remaining === 0, 'tier 50 = done')
+  console.assert(cumXp(50) === 980000, 'reach tier 50 should cost 980,000 XP')
+  console.assert(cumXp(MAX_TIER) === 1162500, 'full pass + epilogue = 1,162,500 XP')
+  const r = plan({ currentTier: 1, goalTier: 50, days: 49 })
+  console.assert(r.remaining === 980000 && r.remainingTiers === 49, 'plan baseline')
 }
